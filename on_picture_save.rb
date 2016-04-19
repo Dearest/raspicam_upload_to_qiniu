@@ -2,10 +2,12 @@
 
 # $*[0] 文件名    $*[1]当前路径
 require 'qiniu'
-require File.expand_path('../config', __FILE__)
+require 'parseconfig'
+
+config = ParseConfig.new('raspi.conf')
 file = $*[0]
-Qiniu.establish_connection! :access_key => Config::ACCESS_KEY,
-                            :secret_key => Config::SECRET_KEY
+Qiniu.establish_connection! :access_key => config['access_key'],
+                            :secret_key => config['secret_key']
 bucket = 'raspicam'
 key = File.basename(file)
 put_policy = Qiniu::Auth::PutPolicy.new(
