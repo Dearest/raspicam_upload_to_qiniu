@@ -3,9 +3,18 @@
 # $*[0] 文件名    $*[1]当前路径
 require 'qiniu'
 require 'parseconfig'
+require 'logging'
 
-config = ParseConfig.new('raspi.conf')
+
 file = $*[0]
+config = ParseConfig.new('raspi.conf')
+logger = Logging.logger['respi_log']
+logger.level = :info
+logger.add_appenders \
+    Logging.appenders.stdout,
+    Logging.appenders.file('~/motion_log/raspi.log')
+logger.info "in code"
+
 Qiniu.establish_connection! :access_key => config['access_key'],
                             :secret_key => config['secret_key']
 bucket = 'raspicam'
@@ -30,6 +39,7 @@ code, result, response_headers = Qiniu::Storage.upload_with_token_2(
     key
 )
 # 上传成功就删除文件
+logger.info code, result
 if code==200
   File.delete(file)
 end
