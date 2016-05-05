@@ -2,21 +2,22 @@
 
 # $*[0] 文件名    $*[1]当前路径
 require 'qiniu'
-require 'parseconfig'
-require 'logging'
+
+# require 'logging'
 
 
 file = $*[0]
-config = ParseConfig.new('raspi.conf')
-logger = Logging.logger['respi_log']
-logger.level = :info
-logger.add_appenders \
-    Logging.appenders.stdout,
-    Logging.appenders.file('~/motion_log/raspi.log')
-logger.info "in code"
+#调用jpegoptim 压缩图片 压缩质量为50%
+`jpegoptim -m50 #{file}`
+# logger = Logging.logger['respi_log']
+# logger.level = :info
+# logger.add_appenders \
+#     Logging.appenders.stdout,
+#     Logging.appenders.file('/home/pi/motion_log/raspi.log')
+# logger.info "in code"
 
-Qiniu.establish_connection! :access_key => config['access_key'],
-                            :secret_key => config['secret_key']
+Qiniu.establish_connection! :access_key => '1rTMEKe1B2Q1SatBg5HfrIm_M3FPcARPPb9hH8Gz',
+                            :secret_key => 'dEMs6Q-yv5KPg2gu4K7Dn0VzejGZrlj008EKLThO'
 bucket = 'raspicam'
 key = File.basename(file)
 put_policy = Qiniu::Auth::PutPolicy.new(
@@ -39,8 +40,8 @@ code, result, response_headers = Qiniu::Storage.upload_with_token_2(
     key
 )
 # 上传成功就删除文件
-logger.info code
-logger.info result
+# logger.info code
+# logger.info result
 if code==200
   File.delete(file)
 end
