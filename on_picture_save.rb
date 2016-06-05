@@ -25,10 +25,10 @@ put_policy = Qiniu::Auth::PutPolicy.new(
     key, # 最终资源名，可省略，即缺省为“创建”语义，设置为nil为普通上传
     3600 #token过期时间，默认为3600s
 )
-# callback_url = 'http://121.42.148.85:3000/face_ident/ident_image'
-# callback_body = 'filename=$(fname)'
-# put_policy.callback_url= callback_url
-# put_policy.callback_body= callback_body
+callback_url = 'http://121.42.148.85:3000/recognition/identify'
+callback_body = 'filename=$(fname)'
+put_policy.callback_url= callback_url
+put_policy.callback_body= callback_body
 #生成上传 Token
 uptoken = Qiniu::Auth.generate_uptoken(put_policy)
 #要上传文件的本地路径
