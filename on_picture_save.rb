@@ -26,7 +26,7 @@ put_policy = Qiniu::Auth::PutPolicy.new(
     3600 #token过期时间，默认为3600s
 )
 callback_url = 'http://121.42.148.85:3000/recognition/identify'
-callback_body = 'filename=$(fname)'
+callback_body = 'filename=$(fname)&device_id=1001'
 put_policy.callback_url= callback_url
 put_policy.callback_body= callback_body
 #生成上传 Token
